@@ -1,0 +1,27 @@
+;;; init.el -- The main nitialization
+
+;;; Commentary:
+;; This mainly calls the different initialization elisp files to initialize emacs
+
+;;; Code:
+
+;; Benchmark the load process
+(require 'init-benchmark)
+
+;; Prepare necessary paths
+(add-to-list 'load-path (expand-file-name "init/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "etc/plugins/" user-emacs-directory))
+
+;; Ensure that flycheck gets the required paths
+
+;; Custom default functions
+(require 'init-default-functions)
+
+;; Default settings
+(require 'init-default-settings)
+
+;; Packages
+(require 'init-packages)
+
+(provide 'init)
+;;; init.el ends here
