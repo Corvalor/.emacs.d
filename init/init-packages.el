@@ -47,6 +47,25 @@
 	)
 )
 
+(use-package org
+	:ensure t
+	:config
+	(setq org-directory "~/.org")
+	(setq org-default-notes-file (concat org-directory "/notes.org"))
+	(setq org-todo-keywords 
+		'((sequence "TODO" "|" "DONE"))
+	)
+	(setq org-todo-keyword-faces
+		'(("TODO" . "yellow")
+		("DONE" . "green"))
+	)
+)
+
+(use-package evil-org
+	:ensure t
+	:config
+)
+
 (use-package evil-leader
 	:ensure t
 	:config
@@ -55,11 +74,15 @@
 	(setq evil-leader/in-all-states 1)
 	(evil-leader/set-key
 		"j" 'compile
+		"k" '(lambda() (interactive) (cdb (concat "cdb " debug-command)))
 		"s" 'projectile-ag
 		"t"	'helm-gtags-dwim
 		"r"	'helm-gtags-pop-stack
 		"o"	'projectile-find-other-file
-		"m"	'magit-status)
+		"m"	'magit-status
+		"c"	'org-capture
+		";" '(lambda() (interactive) (find-file org-default-notes-file))
+	)
 )
 
 (use-package evil
@@ -140,6 +163,12 @@
 (use-package magit
 	:ensure t
 	:config
+	(add-to-list 'magit-log-arguments "--date-order")
+)
+
+(use-package evil-magit
+	:ensure t
+	:config
 )
 
 (use-package yasnippet
@@ -192,5 +221,8 @@
 	:ensure t
 	:config
 )
+
+(load "cdb-gud")
+
 (provide 'init-packages)
 ;;; init-packages.el ends here

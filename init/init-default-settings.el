@@ -30,7 +30,13 @@
 (setq-default c-basic-offset 4 c-default-style "k&r")
 (setq-default tab-width 4 indent-tabs-mode t)
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+;; Disable Automatic Line break, only leave it enable in selected modes
 (setq-default truncate-lines 1)
+(add-hook 'compilation-mode-hook (lambda () (setq truncate-lines nil)))
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+;; Seems to be called after compilation-mode-hook, since I don't want automatic
+;; new lines, I redisable it
+(add-hook 'ag-mode-hook (lambda () (setq truncate-lines 1)))
 
 (setq lisp-body-indent 4)
 
