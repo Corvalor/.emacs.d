@@ -1,0 +1,6 @@
+elpa/
+auto-save-list/
+custom.el
+bookmarks
+server/server
+.mc-lists.el
