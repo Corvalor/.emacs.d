@@ -26,8 +26,12 @@
 ;; modeline
 (require 'init-mode-line)
 
+;; auto insertion
+(require 'init-auto-insert)
+
 ;; msbuild mode
 (require 'msbuild-mode)
+
 
 (provide 'init)
 ;;; init.el ends here
