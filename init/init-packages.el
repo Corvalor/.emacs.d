@@ -5,6 +5,7 @@
 
 ;;; Code:
 ;; Ensure, that the use-package package is installed and install it if not
+
 (if (not (package-installed-p 'use-package))
 	(progn
 	  (package-refresh-contents)
@@ -12,6 +13,7 @@
 	  
 (eval-when-compile
   (require 'use-package))
+  
 
 
 (use-package rich-minority
@@ -36,6 +38,7 @@
 	:ensure t
 	:config
 	(helm-mode 1)
+	(global-set-key (kbd "C-x b") 'helm-buffers-list)
 )
 
 (use-package helm-ag
@@ -57,8 +60,18 @@
 	)
 	(setq org-todo-keyword-faces
 		'(("TODO" . "yellow")
-		("DONE" . "green"))
+		("DONE" . "green")
+		("BLOCKED" . "orange")
+		("INVALIDATED" . "orange"))
 	)
+	(defun my/return-capture-template ()
+		(concat "* TODO [" user-login-name "] %?"))
+	(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline org-default-notes-file "TODO")
+		 (function my/return-capture-template )
+		 :empty-lines-after 0) ))
+	(setq initial-buffer-choice org-default-notes-file)
+	(add-hook 'org-mode-hook '(lambda() (print "test") (universal-argument) (org-update-statistics-cookies nil)))
 )
 
 (use-package evil-org
@@ -80,16 +93,28 @@
 		"r"	'helm-gtags-pop-stack
 		"o"	'projectile-find-other-file
 		"m"	'magit-status
-		"c"	'org-capture
-		";" '(lambda() (interactive) (find-file org-default-notes-file))
+		"c"	'(lambda() (interactive) (org-capture nil "t"))
+		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument) (org-update-statistics-cookies nil))
 	)
 )
 
 (use-package evil
 	:ensure t
 	:config
+	(require 'init-evil)
 	(evil-mode 1)
 	(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+	;; Prevent d, D, c, C and p from yanking the target into the register
+	(evil-define-key 'normal (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
 )
 
 (use-package molokai-theme
@@ -223,6 +248,14 @@
 )
 
 (load "cdb-gud")
+(load "cdb-mi")
+
+(global-set-key [f5]    'gud-cont)
+(global-set-key [f7]    'gud-tbreak)
+(global-set-key [f8]    'gud-step)
+(global-set-key [f9]    'gud-break)
+(global-set-key [f10]   'gud-next)
+(global-set-key [f11]   'gud-finish)
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
