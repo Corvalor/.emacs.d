@@ -71,7 +71,7 @@
 		 (function my/return-capture-template )
 		 :empty-lines-after 0) ))
 	(setq initial-buffer-choice org-default-notes-file)
-	(add-hook 'org-mode-hook '(lambda() (print "test") (universal-argument) (org-update-statistics-cookies nil)))
+	(add-hook 'org-mode-hook '(lambda() (universal-argument) (org-update-statistics-cookies nil) (org-feed-update-all)))
 )
 
 (use-package evil-org
@@ -94,7 +94,9 @@
 		"o"	'projectile-find-other-file
 		"m"	'magit-status
 		"c"	'(lambda() (interactive) (org-capture nil "t"))
-		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument) (org-update-statistics-cookies nil))
+		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument))
+		"v" 'org-insert-todo-subheading-respect-content
+		"f" 'org-insert-todo-heading-respect-content
 	)
 )
 
@@ -113,8 +115,12 @@
 	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
 	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
 	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	;(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
 	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
+	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
 )
 
 (use-package molokai-theme

@@ -17,4 +17,14 @@
           (rename-file filename new-name t)
           (set-visited-file-name new-name t t)))))))
 
+
+(defun org-insert-todo-subheading-respect-content (arg)
+  "Insert a new subheading with TODO keyword or checkbox and demote it.
+Works for outline headings and for plain lists alike."
+  (interactive "P")
+  (org-insert-todo-heading arg '(4))
+  (cond
+   ((org-at-heading-p) (org-do-demote))
+   ((org-at-item-p) (org-indent-item))))
+
 (provide 'init-default-functions)

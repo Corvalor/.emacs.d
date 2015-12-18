@@ -32,6 +32,9 @@
 ;; msbuild mode
 (require 'msbuild-mode)
 
+;; custom stuff, optional
+(require 'init-custom nil t)
+
 
 (provide 'init)
 ;;; init.el ends here
