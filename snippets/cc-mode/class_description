@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+#cotributor: 
+#name: Class description
+#key: \class
+#group: doxygen
+# --
+/**
+ *  \brief ${1:class description}
+ */

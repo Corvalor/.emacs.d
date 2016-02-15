@@ -67,11 +67,13 @@
 	(defun my/return-capture-template ()
 		(concat "* TODO [" user-login-name "] %?"))
 	(setq org-capture-templates
-      '(("t" "Todo" entry (file+headline org-default-notes-file "TODO")
+      '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
 		 (function my/return-capture-template )
 		 :empty-lines-after 0) ))
 	(setq initial-buffer-choice org-default-notes-file)
-	(add-hook 'org-mode-hook '(lambda() (universal-argument) (org-update-statistics-cookies nil) (org-feed-update-all)))
+	(add-hook 'org-agenda-mode-hook '(lambda() (universal-argument) (org-feed-update-all)))
+	(add-hook 'org-agenda-mode-hook 'hl-line-mode)
+	(setq org-agenda-show-outline-path nil)
 )
 
 (use-package evil-org
@@ -97,6 +99,86 @@
 		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument))
 		"v" 'org-insert-todo-subheading-respect-content
 		"f" 'org-insert-todo-heading-respect-content
+	)
+)
+
+(use-package evil-easymotion
+	:ensure t
+	:config
+	(define-prefix-command 'easymotion-prefix)
+	(evilem-default-keybindings "C-u")
+	(evil-leader/set-key
+		  "SPC w" 	(evilem-create 'evil-forward-word-begin)
+		  "SPC W" 	(evilem-create 'evil-forward-WORD-begin)
+		  "SPC e" 	(evilem-create 'evil-forward-word-end)
+		  "SPC E" 	(evilem-create 'evil-forward-WORD-end)
+		  "SPC b" 	(evilem-create 'evil-backward-word-begin)
+		  "SPC B" 	(evilem-create 'evil-backward-WORD-begin)
+		  "SPC ge" 	(evilem-create 'evil-backward-word-end)
+		  "SPC gE" 	(evilem-create 'evil-backward-WORD-end)
+		  "SPC j" 	(evilem-create 'next-line)
+		  "SPC k" 	(evilem-create 'previous-line)
+		  "SPC g j" (evilem-create 'next-line)
+		  "SPC g k" (evilem-create 'previous-line)
+
+		  "SPC t" (evilem-create 'evil-repeat-find-char
+						 (lambda ()
+						   (save-excursion
+							 (let ((evil-cross-lines t))
+							   (call-interactively 'evil-find-char-to))))
+						 nil
+						 ((evil-cross-lines t)))
+
+		  "SPC T" (evilem-create 'evil-repeat-find-char
+						 (lambda ()
+						   (save-excursion
+							 (let ((evil-cross-lines t))
+							   (call-interactively 'evil-find-char-to-backward))))
+						 nil
+						 ((evil-cross-lines t)))
+
+		  "SPC f" (evilem-create 'evil-repeat-find-char
+						 (lambda ()
+						   (save-excursion
+							 (let ((evil-cross-lines t))
+							   (call-interactively 'evil-find-char))))
+						 nil
+						 ((evil-cross-lines t)))
+
+		  "SPC F" (evilem-create 'evil-repeat-find-char
+						 (lambda ()
+						   (save-excursion
+							 (let ((evil-cross-lines t))
+							   (call-interactively 'evil-find-char-backward))))
+						 nil
+						 ((evil-cross-lines t)))
+
+		  "SPC [[" (evilem-create 'evil-backward-section-begin
+						 (lambda ()
+						   (setq evil-this-type 'line)))
+
+		  "SPC []" (evilem-create 'evil-backward-section-end
+						 (lambda ()
+						   (setq evil-this-type 'line)))
+
+		  "SPC ]]" (evilem-create 'evil-forward-section-begin
+						 (lambda ()
+						   (setq evil-this-type 'line)))
+
+		  "SPC ][" (evilem-create 'evil-forward-section-end
+						 (lambda ()
+						   (setq evil-this-type 'line)))
+
+		  "SPC  (" (evilem-create 'evil-forward-sentence)
+		  "SPC  )" (evilem-create 'evil-backward-sentence)
+
+		  "SPC  n" (evilem-create 'evil-search-next)
+		  "SPC  N" (evilem-create 'evil-search-previous)
+		  "SPC  *" (evilem-create 'evil-search-word-forward)
+		  "SPC  #" (evilem-create 'evil-search-word-backward)
+
+		  "SPC  -" (evilem-create 'evil-previous-line-first-non-blank)
+		  "SPC  +" (evilem-create 'evil-next-line-first-non-blank)
 	)
 )
 
@@ -146,23 +228,30 @@
 	(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 )
 
-(use-package flycheck
-	:ensure t
-	:config
-	(add-hook 'after-init-hook 'global-flycheck-mode)
-	(setq-default flycheck-emacs-lisp-load-path 'inherit)
-)
+;;(use-package flycheck
+;;	:ensure t
+;;	:config
+;;	(add-hook 'after-init-hook 'global-flycheck-mode)
+;;	(setq-default flycheck-emacs-lisp-load-path 'inherit)
+;;)
 
-(use-package flycheck-irony
-	:ensure t
-	:config
-	(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-)
+;;(use-package flycheck-irony
+;;	:ensure t
+;;	:config
+;;	(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+;;)
 
 (use-package company
 	:ensure t
 	:config
 	(add-hook 'after-init-hook 'global-company-mode)
+	(setq company-idle-delay 0)
+	(global-set-key "\t" 'company-complete-common)
+)
+
+(use-package rtags
+	:ensure t
+	:config
 )
 
 (use-package company-irony
@@ -172,11 +261,33 @@
 	(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 )
 
+(use-package company-c-headers
+	:ensure t
+	:config
+	(eval-after-load 'company '(add-to-list 'company-backends 'company-c-headers))
+)
+
 (use-package projectile
 	:ensure t
 	:config
 	(setq projectile-indexing-method 'alien)
 	(projectile-global-mode)
+	(defun buffer-whole-string (buffer)
+		(with-current-buffer buffer
+			(save-restriction
+				(widen)
+				(buffer-substring-no-properties (point-min) (point-max)))))
+	(defun projectile-files-with-string (string directory) 
+		(let* (
+			(ag-ignore-list (-union ag-ignore-list
+								(append
+								 (projectile-ignored-files-rel) (projectile-ignored-directories-rel)
+								 grep-find-ignored-files grep-find-ignored-directories)))
+			 (arguments (append (ag/format-ignore ag-ignore-list) '("-l" "--nocolor" "--noheading") ))
+				(cmd (format "ag %s -- %s" (mapconcat 'identity arguments " ") string)))
+			(projectile-files-from-cmd cmd directory)
+		)
+	)
 )
 
 (use-package helm-projectile
@@ -205,6 +316,8 @@
 (use-package yasnippet
 	:ensure t
 	:config
+	(setq yas-snippet-dirs (append yas-snippet-dirs
+					   '("~/.emacs.d/snippets")))
 	(yas-global-mode 1)
 )
 
