@@ -14,8 +14,6 @@
 (eval-when-compile
   (require 'use-package))
   
-
-
 (use-package rich-minority
 	:ensure t
 	:init
@@ -228,24 +226,12 @@
 	(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 )
 
-;;(use-package flycheck
-;;	:ensure t
-;;	:config
-;;	(add-hook 'after-init-hook 'global-flycheck-mode)
-;;	(setq-default flycheck-emacs-lisp-load-path 'inherit)
-;;)
-
-;;(use-package flycheck-irony
-;;	:ensure t
-;;	:config
-;;	(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-;;)
-
 (use-package company
 	:ensure t
 	:config
 	(add-hook 'after-init-hook 'global-company-mode)
-	(setq company-idle-delay 0)
+	(setq company-idle-delay 0.2)
+	(setq company-minimum-prefix-length 1)
 	(global-set-key "\t" 'company-complete-common)
 )
 
@@ -265,6 +251,35 @@
 	:ensure t
 	:config
 	(eval-after-load 'company '(add-to-list 'company-backends 'company-c-headers))
+)
+
+(use-package company-racer
+	:ensure t
+	:config
+)
+
+(use-package racer
+	:ensure t
+	:config
+	(setq racer-cmd "~/.cargo/bin/racer")
+	(setq racer-rust-src-path "~/.rust/src")
+)
+
+(use-package flycheck
+	:ensure t
+	:config
+)
+
+(use-package rust-mode
+	:ensure t
+	:config
+	(add-hook 'rust-mode-hook
+			  '(lambda()
+				   (racer-activate)
+				   (racer-turn-on-eldoc)
+				   (set (make-local-variable 'company-backends) '(company-racer))
+				   (local-set-key (kbd "M-.") #'company-go)
+				   (local-set-key (kbd "TAB") #'company-complete)))
 )
 
 (use-package projectile
@@ -298,17 +313,6 @@
 )
 
 (use-package nyan-mode
-	:ensure t
-	:config
-)
-
-(use-package magit
-	:ensure t
-	:config
-	(add-to-list 'magit-log-arguments "--date-order")
-)
-
-(use-package evil-magit
 	:ensure t
 	:config
 )
@@ -349,6 +353,12 @@
 	(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 )
 
+(use-package evil-magit
+	:ensure t
+	:config
+	(evil-define-key evil-magit-state magit-mode-map "c" 'magit-commit-popup)
+)
+
 (use-package wgrep
 	:ensure t
 	:config
@@ -364,6 +374,12 @@
 (use-package multiple-cursors
 	:ensure t
 	:config
+)
+
+(use-package magit
+	:ensure t
+	:config
+	(add-to-list 'magit-log-arguments "--date-order")
 )
 
 (load "cdb-gud")
