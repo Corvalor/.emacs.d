@@ -68,7 +68,14 @@
       '(("t" "Todo" entry (file+headline org-default-notes-file "Tasks")
 		 (function my/return-capture-template )
 		 :empty-lines-after 0) ))
-	(setq initial-buffer-choice org-default-notes-file)
+	(setq initial-buffer-choice
+		(let ((name (car (last command-line-args))))
+			(if (string= name "emacs")
+				org-default-notes-file
+				name
+			)
+		)
+	)
 	(add-hook 'org-agenda-mode-hook '(lambda() (universal-argument) (org-feed-update-all)))
 	(add-hook 'org-agenda-mode-hook 'hl-line-mode)
 	(setq org-agenda-show-outline-path nil)
