@@ -281,12 +281,19 @@
 	:ensure t
 	:config
 	(add-hook 'rust-mode-hook
-			  '(lambda()
-				   (racer-activate)
-				   (racer-turn-on-eldoc)
-				   (set (make-local-variable 'company-backends) '(company-racer))
-				   (local-set-key (kbd "M-.") #'company-go)
-				   (local-set-key (kbd "TAB") #'company-complete)))
+		'(lambda()
+			(defun brackets-auto-indent () (interactive)
+				(insert "}")
+				(company-indent-or-complete-common)
+			)
+			(racer-activate)
+			(racer-turn-on-eldoc)
+			(set (make-local-variable 'company-backends) '(company-racer))
+			(local-set-key (kbd "M-.") #'company-go)
+			(local-set-key (kbd "TAB") #'company-indent-or-complete-common)
+			(local-set-key (kbd "}") #'brackets-auto-indent)
+		)
+	)
 )
 
 (use-package projectile
