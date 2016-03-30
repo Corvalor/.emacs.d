@@ -13,6 +13,10 @@
 	  
 (eval-when-compile
   (require 'use-package))
+
+(use-package el-get
+	:ensure t
+    )
   
 (use-package rich-minority
 	:ensure t
@@ -86,18 +90,55 @@
 	:config
 )
 
+(use-package layout-restore
+	:ensure t
+	:config
+	(setq layout-restore-after-switchbuffer nil)
+	(setq layout-restore-after-killbuffer nil)
+	(ad-deactivate 'switch-to-buffer)
+	(ad-deactivate 'kill-buffer)
+	(ad-deactivate 'other-window)
+)
+
 (use-package evil-leader
 	:ensure t
 	:config
+	(defun custom-find-symbol-at-point () (interactive)
+		(if (eq system-type 'gnu/linux)
+			(rtags-find-symbol-at-point)
+			(helm-gtags-dwim)
+		)
+	)
+	(defun custom-go-back () (interactive)
+		(if (eq system-type 'gnu/linux)
+			(rtags-location-stack-back)
+			(helm-gtags-pop-stack)
+		)
+	)
+	(defun custom-layout-restore () (interactive)
+		(kill-this-buffer)
+		(layout-restore)
+	)
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
 	(setq evil-leader/in-all-states 1)
 	(evil-leader/set-key
 		"j" 'compile
-		"k" '(lambda() (interactive) (cdb (concat "cdb " debug-command)))
+		"k" '(lambda() (interactive)
+				 (if (string= major-mode 'gud-mode)
+						 (custom-layout-restore)
+						 (layout-save-current) (gdb (concat debug-command))
+			     )
+			 )
+		"l" '(lambda() (interactive) 
+				 (if (string= major-mode 'gud-mode)
+						 (custom-layout-restore)
+						 (layout-save-current) (gdb (concat debug-command-2))
+			     )
+			)
 		"s" 'projectile-ag
-		"t"	'helm-gtags-dwim
-		"r"	'helm-gtags-pop-stack
+		"t"	'custom-find-symbol-at-point
+		"r"	'custom-go-back
 		"o"	'projectile-find-other-file
 		"m"	'magit-status
 		"c"	'(lambda() (interactive) (org-capture nil "t"))
@@ -134,7 +175,7 @@
 						 nil
 						 ((evil-cross-lines t)))
 
-		  "SPC T" (evilem-create 'evil-repeat-find-char
+		  "SPC T" (evilem-create 'evil-repeat-find-char-backwards
 						 (lambda ()
 						   (save-excursion
 							 (let ((evil-cross-lines t))
@@ -150,7 +191,7 @@
 						 nil
 						 ((evil-cross-lines t)))
 
-		  "SPC F" (evilem-create 'evil-repeat-find-char
+		  "SPC F" (evilem-create 'evil-repeat-find-char-backwards
 						 (lambda ()
 						   (save-excursion
 							 (let ((evil-cross-lines t))
@@ -224,7 +265,6 @@
 	(add-hook 'c-mode-hook 'irony-mode)
 	(add-hook 'objc-mode-hook 'irony-mode)
 	(setq w32-pipe-read-delay 0)
-	(setq irony-additional-clang-options (quote ("-std=c++11" "-stdlib=libc++")))
 	(defun my-irony-mode-hook()
 		(define-key irony-mode-map [remap completion-at-point] 'irony-completion-at-point-async)
 		(define-key irony-mode-map [remap complete-symbol] 'irony-completion-at-point-async)
@@ -275,6 +315,14 @@
 (use-package flycheck
 	:ensure t
 	:config
+	(add-hook 'c-mode-hook 'flycheck-mode)
+	(add-hook 'c++-mode-hook 'flycheck-mode)
+)
+
+(use-package flycheck-irony
+	:ensure t
+	:config
+	(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
 )
 
 (use-package rust-mode
@@ -337,8 +385,8 @@
 	(setq yas-snippet-dirs (append yas-snippet-dirs
 					   '("~/.emacs.d/snippets")))
 	(yas-global-mode 1)
-	(define-key yas-minor-mode-map (kbd "<tab>") nil)
-	(define-key yas-minor-mode-map (kbd "TAB") nil)
+	(define-key yas-minor-mode-map (kbd "<tab>") 'yas-expand)
+	(define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 	;;(define-key yas-minor-mode-map (kbd "<the new key>") 'yas-expand)
 )
 
@@ -399,6 +447,31 @@
 	(add-to-list 'magit-log-arguments "--date-order")
 )
 
+(use-package w3
+	:ensure t
+	:config
+)
+
+(use-package tempo
+	:ensure t
+	:config
+)
+
+(use-package uncrustify-mode
+	:ensure t
+	:config
+    (add-hook 'c-mode-common-hook
+              '(lambda()
+                   (uncrustify-mode 1)))
+)
+
+(use-package framemove
+	:ensure t
+	:config
+    (windmove-default-keybindings)
+    (setq framemove-hook-into-windmove t)
+)
+
 (load "cdb-gud")
 (load "cdb-mi")
 
@@ -408,6 +481,17 @@
 (global-set-key [f9]    'gud-break)
 (global-set-key [f10]   'gud-next)
 (global-set-key [f11]   'gud-finish)
+
+(require 'gdb-mi)
+(gdb-many-windows)
+
+(require 'doxymacs)
+(add-hook 'c-mode-common-hook 'doxymacs-mode)
+(defun my-doxymacs-font-lock-hook ()
+    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+        (doxymacs-font-lock)))
+(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+
 
 (provide 'init-packages)
 ;;; init-packages.el ends here

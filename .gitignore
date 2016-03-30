@@ -8,6 +8,5 @@ projectile-bookmarks.eld
 server/
 init/init-custom.el
 url/cookies
-/session.10d301e7e6b6cc8ba414557479827873100000018670047
-auto-save-list
-auto-save-list/*
+/session.*
+/projectile.cache

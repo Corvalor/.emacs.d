@@ -28,10 +28,11 @@
 
 (require 'cc-mode)
 (setq-default c-basic-offset 4 c-default-style "k&r")
-(setq-default tab-width 4 indent-tabs-mode t)
+(setq-default tab-width 4 indent-tabs-mode nil)
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 ;; Disable Automatic Line break, only leave it enable in selected modes
 (setq-default truncate-lines 1)
+(add-hook 'gdb-inferior-io-mode-hook 'visual-line-mode)
 (add-hook 'compilation-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 ;; Seems to be called after compilation-mode-hook, since I don't want automatic
@@ -56,6 +57,12 @@
 
 ;; Enable Line Highlight
 (global-hl-line-mode t)
+
+(eval-after-load "cc-mode"
+  '(define-key c-mode-base-map (kbd "RET") 'c-context-line-break))
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+(set-frame-font "Consolas-9:antialias=none")
 
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here
