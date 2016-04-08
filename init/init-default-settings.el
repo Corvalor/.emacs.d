@@ -32,6 +32,7 @@
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 ;; Disable Automatic Line break, only leave it enable in selected modes
 (setq-default truncate-lines 1)
+(setq nxml-child-indent 4)
 (add-hook 'gdb-inferior-io-mode-hook 'visual-line-mode)
 (add-hook 'compilation-mode-hook (lambda () (setq truncate-lines nil)))
 (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
@@ -42,13 +43,9 @@
 (setq lisp-body-indent 4)
 
 ;;Disable the varous things in the window-system, that we don't want
-(if window-system
-	(progn
-		(tool-bar-mode -1)
-		(menu-bar-mode -1)
-		(toggle-scroll-bar -1)
-	)
-)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
 
 (add-to-list 'custom-theme-load-path (df_emacs.d "etc/themes"))
 
@@ -62,7 +59,9 @@
   '(define-key c-mode-base-map (kbd "RET") 'c-context-line-break))
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
-(set-frame-font "Consolas-9:antialias=none")
+(set-frame-font "Consolas-9:antialias=subpixel")
+
+(server-start)
 
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here

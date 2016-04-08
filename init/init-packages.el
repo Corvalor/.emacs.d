@@ -119,11 +119,18 @@
 		(kill-this-buffer)
 		(layout-restore)
 	)
+    (defun my-compile()
+        (interactive)
+        (if (not (get-buffer-window "*compilation*" t))
+                (call-interactively 'compile)
+            (save-window-excursion
+                (recompile)))
+    )
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
 	(setq evil-leader/in-all-states 1)
 	(evil-leader/set-key
-		"j" 'compile
+		"j" 'my-compile
 		"k" '(lambda() (interactive)
 				 (if (string= major-mode 'gud-mode)
 						 (custom-layout-restore)
