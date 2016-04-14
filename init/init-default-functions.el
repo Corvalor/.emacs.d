@@ -27,4 +27,22 @@ Works for outline headings and for plain lists alike."
    ((org-at-heading-p) (org-do-demote))
    ((org-at-item-p) (org-indent-item))))
 
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (if (vc-backend filename)
+          (vc-delete-file filename)
+        (progn
+          (delete-file filename)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
+(defun xml-format ()
+  (interactive)
+  (save-excursion
+    (shell-command-on-region (mark) (point) "export XMLLINT_INDET=$'\t' && xmllint --format -" (buffer-name) t)
+  )
+)
+
 (provide 'init-default-functions)

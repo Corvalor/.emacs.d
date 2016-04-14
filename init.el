@@ -25,6 +25,10 @@
 (require 'init-packages)
 (require 'init-custom-packages)
 
+;; Push the custom variables somewhere else
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 ;; modeline
 (require 'init-mode-line)
 

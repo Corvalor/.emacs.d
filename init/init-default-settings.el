@@ -5,10 +5,6 @@
 ;;; Code:
 (require 'init-default-functions)
 
-;; Push the custom variables somewhere else
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-
 ;; Disable the creation of lock files, would prefer to put them somewhere else, but disabling it seems
 ;; to be the only option right now
 (setq create-lockfiles nil)
@@ -50,7 +46,7 @@
 (add-to-list 'custom-theme-load-path (df_emacs.d "etc/themes"))
 
 ;; Enable Line Numbers
-(global-linum-mode t)
+(add-hook 'prog-mode-hook 'linum-mode)
 
 ;; Enable Line Highlight
 (global-hl-line-mode t)

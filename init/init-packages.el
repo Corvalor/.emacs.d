@@ -57,6 +57,7 @@
 	:config
 	(setq org-directory "~/.org")
 	(setq org-default-notes-file (concat org-directory "/notes.org"))
+	(setq org-default-trello-file (concat org-directory "/notes.trello"))
 	(setq org-todo-keywords 
 		'((sequence "TODO" "|" "DONE"))
 	)
@@ -89,6 +90,19 @@
 	:ensure t
 	:config
 )
+(use-package org-trello
+    :ensure t
+    :config
+        ;; org-trello major mode for all .trello files
+    (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
+
+    ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+    (add-hook 'org-mode-hook
+            (lambda ()
+                (let ((filename (buffer-file-name (current-buffer))))
+                (when (and filename (string= "trello" (file-name-extension filename)))
+                (org-trello-mode)))))
+    )
 
 (use-package layout-restore
 	:ensure t
@@ -121,16 +135,23 @@
 	)
     (defun my-compile()
         (interactive)
-        (if (not (get-buffer-window "*compilation*" t))
-                (call-interactively 'compile)
-            (save-window-excursion
-                (recompile)))
+        (compile real-compile-command)
+    )
+    (defun my-iwyu()
+        (interactive)
+        (compile iwyu-command)
+    )
+    (defun my-doxy()
+        (interactive)
+        (compile doxy-command)
     )
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
 	(setq evil-leader/in-all-states 1)
 	(evil-leader/set-key
 		"j" 'my-compile
+		"i" 'my-iwyu
+		"d" 'my-doxy
 		"k" '(lambda() (interactive)
 				 (if (string= major-mode 'gud-mode)
 						 (custom-layout-restore)
@@ -150,6 +171,7 @@
 		"m"	'magit-status
 		"c"	'(lambda() (interactive) (org-capture nil "t"))
 		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument))
+		"'" '(lambda() (interactive) (find-file org-default-trello-file) (universal-argument))
 		"v" 'org-insert-todo-subheading-respect-content
 		"f" 'org-insert-todo-heading-respect-content
 	)
@@ -159,7 +181,7 @@
 	:ensure t
 	:config
 	(define-prefix-command 'easymotion-prefix)
-	(evilem-default-keybindings "C-u")
+	(evilem-default-keybindings "C-[")
 	(evil-leader/set-key
 		  "SPC w" 	(evilem-create 'evil-forward-word-begin)
 		  "SPC W" 	(evilem-create 'evil-forward-WORD-begin)

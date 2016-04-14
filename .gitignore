@@ -10,3 +10,4 @@ init/init-custom.el
 url/cookies
 /session.*
 /projectile.cache
+/.trello/carstenknappe1.el
