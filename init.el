@@ -8,6 +8,7 @@
 ;; Prepare necessary paths
 (add-to-list 'load-path (expand-file-name "init/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "etc/plugins/" user-emacs-directory))
+(add-to-list 'load-path "~/share/emacs/site-lisp")
 
 ;; Benchmark the load process
 ;;(require 'init-benchmark)
@@ -22,6 +23,11 @@
 
 ;; Packages
 (require 'init-packages)
+(require 'init-custom-packages)
+
+;; Push the custom variables somewhere else
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 ;; modeline
 (require 'init-mode-line)
@@ -34,7 +40,6 @@
 
 ;; custom stuff, optional
 (require 'init-custom nil t)
-
 
 (provide 'init)
 ;;; init.el ends here

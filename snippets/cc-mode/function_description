@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+#cotributor: Henrique Jung <henriquenj@gmail.com>
+#name: Function description
+#key: \brief
+#group: doxygen
+# --
+/**
+ *  \brief ${1:function description}
+ *  \param ${2:param}
+ *  \return ${3:return type}
+ *  \exception_safety ${4: exception safety}
+ */
