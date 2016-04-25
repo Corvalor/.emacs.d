@@ -11,3 +11,4 @@ url/cookies
 /session.*
 /projectile.cache
 /.trello/carstenknappe1.el
+/irony/bin/irony-server
