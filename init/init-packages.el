@@ -75,9 +75,10 @@
 		 :empty-lines-after 0) ))
 	(setq initial-buffer-choice
 		(let ((name (car (last command-line-args))))
-			(if (string= name "emacs")
+			(if (or (string-match "emacs$" name)
+                    (string-match "emacs.exe$" name))
 				org-default-notes-file
-				name
+				
 			)
 		)
 	)
