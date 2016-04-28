@@ -165,7 +165,7 @@
 						 (layout-save-current) (gdb (concat debug-command-2))
 			     )
 			)
-		"s" 'projectile-ag
+		"s" 'my-projectile-ag
 		"t"	'custom-find-symbol-at-point
 		"r"	'custom-go-back
 		"o"	'projectile-find-other-file

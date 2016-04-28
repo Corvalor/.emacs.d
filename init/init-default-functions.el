@@ -45,4 +45,27 @@ Works for outline headings and for plain lists alike."
   )
 )
 
+;; Changes so it does not ignore my ag-ignore-list
+(defun my-projectile-ag (search-term &optional arg)
+  "Run an ag search with SEARCH-TERM in the project.
+
+With an optional prefix argument ARG SEARCH-TERM is interpreted as a
+regular expression."
+  (interactive
+   (list (read-from-minibuffer
+          (projectile-prepend-project-name (format "Ag %ssearch for: " (if current-prefix-arg "regexp " "")))
+          (projectile-symbol-or-selection-at-point))
+         current-prefix-arg))
+  (if (require 'ag nil 'noerror)
+      (let ((ag-command (if arg 'ag-regexp 'ag))
+            (ag-ignore-list (-union ag-ignore-list
+                                      (append
+                                       (projectile-ignored-files-rel) (projectile-ignored-directories-rel)
+                                       (projectile--globally-ignored-file-suffixes-glob)
+                                       grep-find-ignored-files grep-find-ignored-directories)))
+            ;; reset the prefix arg, otherwise it will affect the ag-command
+            (current-prefix-arg nil))
+        (funcall ag-command search-term (projectile-project-root)))
+    (error "Package 'ag' is not available")))
+
 (provide 'init-default-functions)
