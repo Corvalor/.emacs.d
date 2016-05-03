@@ -178,80 +178,99 @@
 	)
 )
 
+(use-package avy
+    :ensure t)
+
 (use-package evil-easymotion
 	:ensure t
 	:config
 	(define-prefix-command 'easymotion-prefix)
 	(evilem-default-keybindings "C-[")
 	(evil-leader/set-key
-		  "SPC w" 	(evilem-create 'evil-forward-word-begin)
-		  "SPC W" 	(evilem-create 'evil-forward-WORD-begin)
-		  "SPC e" 	(evilem-create 'evil-forward-word-end)
-		  "SPC E" 	(evilem-create 'evil-forward-WORD-end)
-		  "SPC b" 	(evilem-create 'evil-backward-word-begin)
-		  "SPC B" 	(evilem-create 'evil-backward-WORD-begin)
-		  "SPC ge" 	(evilem-create 'evil-backward-word-end)
-		  "SPC gE" 	(evilem-create 'evil-backward-WORD-end)
-		  "SPC j" 	(evilem-create 'next-line)
-		  "SPC k" 	(evilem-create 'previous-line)
-		  "SPC g j" (evilem-create 'next-line)
-		  "SPC g k" (evilem-create 'previous-line)
+        "SPC w" 	(evilem-create 'evil-forward-word-begin
+                                   :scope 'line )
+		  "SPC W" 	(evilem-create 'evil-forward-WORD-begin
+                                   :scope 'line )
+		  "SPC e" 	(evilem-create 'evil-forward-word-end
+                                   :scope 'line )
+		  "SPC E" 	(evilem-create 'evil-forward-WORD-end
+                                   :scope 'line )
+		  "SPC b" 	(evilem-create 'evil-backward-word-begin
+                                   :scope 'line )
+		  "SPC B" 	(evilem-create 'evil-backward-WORD-begin
+                                   :scope 'line )
+		  "SPC ge" 	(evilem-create 'evil-backward-word-end
+                                   :scope 'line )
+		  "SPC gE" 	(evilem-create 'evil-backward-WORD-end
+                                   :scope 'line )
+		  "SPC j" 	(evilem-create 'next-line
+                 :pre-hook (setq evil-this-type 'line)
+                 :bind ((temporary-goal-column (current-column))
+                        (line-move-visual nil)))
+		  "SPC k" 	(evilem-create 'previous-line
+                 :pre-hook (setq evil-this-type 'line)
+                 :bind ((temporary-goal-column (current-column))
+                        (line-move-visual nil)))
+		  "SPC g j" (evilem-create 'next-line
+                 :pre-hook (setq evil-this-type 'line)
+                 :bind ((temporary-goal-column (current-column))
+                        (line-move-visual t)))
+		  "SPC g k" (evilem-create 'previous-line
+                 :pre-hook (setq evil-this-type 'line)
+                 :bind ((temporary-goal-column (current-column))
+                        (line-move-visual t)))
 
 		  "SPC t" (evilem-create 'evil-repeat-find-char
-						 (lambda ()
-						   (save-excursion
-							 (let ((evil-cross-lines t))
-							   (call-interactively 'evil-find-char-to))))
-						 nil
-						 ((evil-cross-lines t)))
+                 :pre-hook (save-excursion
+                             (call-interactively #'evil-find-char-to))
+                 :bind ((evil-cross-lines t)))
 
-		  "SPC T" (evilem-create 'evil-repeat-find-char-backwards
-						 (lambda ()
-						   (save-excursion
-							 (let ((evil-cross-lines t))
-							   (call-interactively 'evil-find-char-to-backward))))
-						 nil
-						 ((evil-cross-lines t)))
+		   "SPC T" (evilem-create 'evil-repeat-find-char
+                 :pre-hook (save-excursion
+                             (call-interactively #'evil-find-char-to-backward))
+                 :bind ((evil-cross-lines t)))
 
-		  "SPC f" (evilem-create 'evil-repeat-find-char
-						 (lambda ()
-						   (save-excursion
-							 (let ((evil-cross-lines t))
-							   (call-interactively 'evil-find-char))))
-						 nil
-						 ((evil-cross-lines t)))
+		   "SPC f" (evilem-create 'evil-repeat-find-char
+                 :pre-hook (save-excursion
+                             (call-interactively #'evil-find-char))
+                 :bind ((evil-cross-lines t)))
 
 		  "SPC F" (evilem-create 'evil-repeat-find-char-backwards
-						 (lambda ()
-						   (save-excursion
-							 (let ((evil-cross-lines t))
-							   (call-interactively 'evil-find-char-backward))))
-						 nil
-						 ((evil-cross-lines t)))
+                 :pre-hook (save-excursion
+                             (call-interactively #'evil-find-char-backward))
+                 :bind ((evil-cross-lines t)))
 
-		  "SPC [[" (evilem-create 'evil-backward-section-begin
-						 (lambda ()
-						   (setq evil-this-type 'line)))
+		    "SPC [[" (evilem-create 'evil-backward-section-begin
+                 :pre-hook (setq evil-this-type 'line))
 
-		  "SPC []" (evilem-create 'evil-backward-section-end
-						 (lambda ()
-						   (setq evil-this-type 'line)))
+		    "SPC []" (evilem-create 'evil-backward-section-end
+                 :pre-hook (setq evil-this-type 'line))
 
-		  "SPC ]]" (evilem-create 'evil-forward-section-begin
-						 (lambda ()
-						   (setq evil-this-type 'line)))
+		    "SPC ]]" (evilem-create 'evil-forward-section-begin
+                 :pre-hook (setq evil-this-type 'line))
 
-		  "SPC ][" (evilem-create 'evil-forward-section-end
-						 (lambda ()
-						   (setq evil-this-type 'line)))
+		    "SPC ][" (evilem-create 'evil-forward-section-end
+                 :pre-hook (setq evil-this-type 'line))
 
 		  "SPC  (" (evilem-create 'evil-forward-sentence)
 		  "SPC  )" (evilem-create 'evil-backward-sentence)
 
-		  "SPC  n" (evilem-create 'evil-search-next)
-		  "SPC  N" (evilem-create 'evil-search-previous)
-		  "SPC  *" (evilem-create 'evil-search-word-forward)
-		  "SPC  #" (evilem-create 'evil-search-word-backward)
+		  "SPC  n" (evilem-create 'evil-search-next
+                 :bind (((symbol-function #'isearch-lazy-highlight-update)
+                         #'ignore)
+                        (search-highlight nil)))
+		  "SPC  N" (evilem-create 'evil-search-previous
+                 :bind (((symbol-function #'isearch-lazy-highlight-update)
+                         #'ignore)
+                        (search-highlight nil)))
+		  "SPC  *" (evilem-create 'evil-search-word-forward
+                 :bind (((symbol-function #'isearch-lazy-highlight-update)
+                         #'ignore)
+                        (search-highlight nil)))
+		  "SPC  #" (evilem-create 'evil-search-word-backward
+                 :bind (((symbol-function #'isearch-lazy-highlight-update)
+                         #'ignore)
+                        (search-highlight nil)))
 
 		  "SPC  -" (evilem-create 'evil-previous-line-first-non-blank)
 		  "SPC  +" (evilem-create 'evil-next-line-first-non-blank)
