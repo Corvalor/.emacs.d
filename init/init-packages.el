@@ -59,12 +59,13 @@
 	(setq org-default-notes-file (concat org-directory "/notes.org"))
 	(setq org-default-trello-file (concat org-directory "/notes.trello"))
 	(setq org-todo-keywords 
-		'((sequence "TODO" "|" "DONE"))
+          '((sequence "TODO(t)" "|" "DONE(d)")
+            (sequence "BLOCKED(b)" "|" "INVALIDATED(i)"))
 	)
 	(setq org-todo-keyword-faces
 		'(("TODO" . "yellow")
 		("DONE" . "green")
-		("BLOCKED" . "orange")
+		("BLOCKED" . "deep sky blue")
 		("INVALIDATED" . "orange"))
 	)
 	(defun my/return-capture-template ()
@@ -85,6 +86,8 @@
 	(add-hook 'org-agenda-mode-hook '(lambda() (universal-argument) (org-feed-update-all)))
 	(add-hook 'org-agenda-mode-hook 'hl-line-mode)
 	(setq org-agenda-show-outline-path nil)
+    (setq org-log-into-drawer t)
+    (setq org-clock-into-drawer t)
 )
 
 (use-package evil-org
