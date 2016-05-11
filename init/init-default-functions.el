@@ -41,7 +41,7 @@ Works for outline headings and for plain lists alike."
 (defun xml-format ()
   (interactive)
   (save-excursion
-    (shell-command-on-region (mark) (point) "export XMLLINT_INDET=$'\t' && xmllint --format -" (buffer-name) t)
+    (shell-command-on-region (point-min) (point-max) "export XMLLINT_INDET=$'\t' && xmllint --format -" (buffer-name) t)
   )
 )
 
