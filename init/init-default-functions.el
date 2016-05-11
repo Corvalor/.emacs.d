@@ -68,4 +68,17 @@ regular expression."
         (funcall ag-command search-term (projectile-project-root)))
     (error "Package 'ag' is not available")))
 
+(defun virtualize(beg end)
+        (interactive "*r")
+        (save-restriction
+            (narrow-to-region beg end)
+            (save-excursion
+                (goto-char (point-min))
+                (while (search-forward-regexp "\\(^\\s-*\\)\\([^ ]+? \\)\\(\\w+?\\)(\\(\\(.*?\n?\\)*?\\))" nil t)
+                    (replace-match "\\1virtual \\2\\3(\\4) = 0" nil nil )))))
+
+(defun kill-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+
 (provide 'init-default-functions)
