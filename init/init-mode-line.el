@@ -7,7 +7,7 @@
    (:propertize "%b"
                 face mode-line-filename-face)
 	; Position, including warning for 80 columns
-   (:propertize "%5l:" face mode-line-position-face)
+   (:propertize "%5l" face mode-line-position-face)
    (:eval (propertize "%3c" 'face
                       (if (>= (current-column) 80)
                           'mode-line-80col-face
@@ -26,14 +26,14 @@
    ;; " %n "
    ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
    ;;(vc-mode vc-mode)
-   "  %["
+   ;; "  %["
    (:propertize mode-name
                 face mode-line-mode-face)
-   "%] "
-   (:eval (propertize (format-mode-line rm--mode-line-construct)
-                      'face 'mode-line-minor-mode-face))
-   (:propertize mode-line-process
-                face mode-line-process-face)
+   ;; "%] "
+   ;; (:eval (propertize (format-mode-line rm--mode-line-construct)
+   ;;                    'face 'mode-line-minor-mode-face))
+   ;; (:propertize mode-line-process
+   ;;              face mode-line-process-face)
    (global-mode-string global-mode-string)
    "    "
    ; nyan-mode uses nyan cat as an alternative to %p
