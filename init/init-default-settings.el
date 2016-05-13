@@ -59,5 +59,9 @@
 
 (server-start)
 
+;; Unset because in org mode I often mistype C-c C-x as this command, closing
+;; emacs and annoying me
+(setq confirm-kill-emacs 'yes-or-no-p)
+
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here
