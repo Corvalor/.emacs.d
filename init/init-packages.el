@@ -90,6 +90,29 @@
     (setq org-clock-into-drawer t)
 )
 
+(use-package evil
+	:ensure t
+	:config
+	(require 'init-evil)
+	(evil-mode 1)
+	(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+	;; Prevent d, D, c, C and p from yanking the target into the register
+	(evil-define-key 'normal (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
+	;(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
+	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
+)
+
 (use-package evil-org
 	:ensure t
 	:config
@@ -278,29 +301,6 @@
 		  "SPC  -" (evilem-create 'evil-previous-line-first-non-blank)
 		  "SPC  +" (evilem-create 'evil-next-line-first-non-blank)
 	)
-)
-
-(use-package evil
-	:ensure t
-	:config
-	(require 'init-evil)
-	(evil-mode 1)
-	(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
-	;; Prevent d, D, c, C and p from yanking the target into the register
-	(evil-define-key 'normal (current-global-map) (kbd "d") 'evil-delete-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "d") 'evil-delete-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "D") 'evil-delete-line-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "D") 'evil-delete-line-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "c") 'evil-change-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
-	;(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "m") 'evil-delete)
-	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
-	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
-	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
 )
 
 (use-package molokai-theme
