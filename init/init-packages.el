@@ -131,15 +131,15 @@
                 (org-trello-mode)))))
     )
 
-(use-package layout-restore
-	:ensure t
-	:config
-	(setq layout-restore-after-switchbuffer nil)
-	(setq layout-restore-after-killbuffer nil)
-	(ad-deactivate 'switch-to-buffer)
-	(ad-deactivate 'kill-buffer)
-	(ad-deactivate 'other-window)
-)
+;;(use-package layout-restore
+;;	:ensure t
+;;	:config
+;;	(setq layout-restore-after-switchbuffer nil)
+;;	(setq layout-restore-after-killbuffer nil)
+;;	(ad-deactivate 'switch-to-buffer)
+;;	(ad-deactivate 'kill-buffer)
+;;	(ad-deactivate 'other-window)
+;;)
 
 (use-package evil-leader
 	:ensure t
