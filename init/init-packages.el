@@ -514,7 +514,8 @@
 	:config
     (add-hook 'c-mode-common-hook
               '(lambda()
-                   (uncrustify-mode 1)))
+                   (if (file-exists-p uncrustify-config-path)
+                           (uncrustify-mode 1))))
 )
 
 (use-package framemove
