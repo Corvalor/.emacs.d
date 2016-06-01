@@ -90,6 +90,29 @@
     (setq org-clock-into-drawer t)
 )
 
+(use-package evil
+	:ensure t
+	:config
+	(require 'init-evil)
+	(evil-mode 1)
+	(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
+	;; Prevent d, D, c, C and p from yanking the target into the register
+	(evil-define-key 'normal (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "d") 'evil-delete-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "D") 'evil-delete-line-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
+	;(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
+	(evil-define-key 'normal (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
+	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
+	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
+)
+
 (use-package evil-org
 	:ensure t
 	:config
@@ -108,15 +131,15 @@
                 (org-trello-mode)))))
     )
 
-(use-package layout-restore
-	:ensure t
-	:config
-	(setq layout-restore-after-switchbuffer nil)
-	(setq layout-restore-after-killbuffer nil)
-	(ad-deactivate 'switch-to-buffer)
-	(ad-deactivate 'kill-buffer)
-	(ad-deactivate 'other-window)
-)
+;;(use-package layout-restore
+;;	:ensure t
+;;	:config
+;;	(setq layout-restore-after-switchbuffer nil)
+;;	(setq layout-restore-after-killbuffer nil)
+;;	(ad-deactivate 'switch-to-buffer)
+;;	(ad-deactivate 'kill-buffer)
+;;	(ad-deactivate 'other-window)
+;;)
 
 (use-package evil-leader
 	:ensure t
@@ -278,29 +301,6 @@
 		  "SPC  -" (evilem-create 'evil-previous-line-first-non-blank)
 		  "SPC  +" (evilem-create 'evil-next-line-first-non-blank)
 	)
-)
-
-(use-package evil
-	:ensure t
-	:config
-	(require 'init-evil)
-	(evil-mode 1)
-	(define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
-	;; Prevent d, D, c, C and p from yanking the target into the register
-	(evil-define-key 'normal (current-global-map) (kbd "d") 'evil-delete-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "d") 'evil-delete-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "D") 'evil-delete-line-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "D") 'evil-delete-line-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "c") 'evil-change-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "c") 'evil-change-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "C") 'evil-change-line-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "C") 'evil-change-line-custom)
-	;(evil-define-key 'normal (current-global-map) (kbd "p") 'evil-paste-after-custom)
-	(evil-define-key 'visual (current-global-map) (kbd "p") 'evil-paste-after-custom)
-	(evil-define-key 'normal (current-global-map) (kbd "m") 'evil-delete)
-	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
-	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
-	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
 )
 
 (use-package molokai-theme
@@ -514,7 +514,8 @@
 	:config
     (add-hook 'c-mode-common-hook
               '(lambda()
-                   (uncrustify-mode 1)))
+                   (if (file-exists-p uncrustify-config-path)
+                           (uncrustify-mode 1))))
 )
 
 (use-package framemove
@@ -542,12 +543,12 @@
 (require 'gdb-mi)
 (gdb-many-windows)
 
-(require 'doxymacs)
-(add-hook 'c-mode-common-hook 'doxymacs-mode)
-(defun my-doxymacs-font-lock-hook ()
-    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-        (doxymacs-font-lock)))
-(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+;; (require 'doxymacs)
+;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
+;; (defun my-doxymacs-font-lock-hook ()
+;;     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+;;         (doxymacs-font-lock)))
+;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
 
 
 (provide 'init-packages)
