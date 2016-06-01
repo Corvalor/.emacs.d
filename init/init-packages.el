@@ -524,6 +524,11 @@
     (setq framemove-hook-into-windmove t)
 )
 
+(use-package lua-mode
+	:ensure t
+	:config
+)
+
 (load "cdb-gud")
 (load "cdb-mi")
 
