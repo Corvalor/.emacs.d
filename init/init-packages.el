@@ -166,11 +166,19 @@
     )
     (defun my-iwyu()
         (interactive)
-        (compile iwyu-command)
+        (compile (funcall iwyu-command))
     )
-    (defun my-doxy()
+    (defun my-short-doxy()
         (interactive)
-        (compile doxy-command)
+        (compile (funcall short-doxy-command))
+    )
+    (defun my-category-doxy()
+        (interactive)
+        (compile category-doxy-command)
+    )
+    (defun my-long-doxy()
+        (interactive)
+        (compile long-doxy-command)
     )
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
@@ -178,7 +186,9 @@
 	(evil-leader/set-key
 		"j" 'my-compile
 		"i" 'my-iwyu
-		"d" 'my-doxy
+		"e" 'my-short-doxy
+		"w" 'my-category-doxy
+		"d" 'my-long-doxy
 		"k" '(lambda() (interactive)
 				 (if (string= major-mode 'gud-mode)
 						 (custom-layout-restore)
@@ -434,13 +444,13 @@
 (use-package yasnippet
 	:ensure t
 	:config
-	(setq yas-snippet-dirs (append yas-snippet-dirs
-					   '("~/.emacs.d/snippets")))
 	(yas-global-mode 1)
 	(define-key yas-minor-mode-map (kbd "<tab>") 'yas-expand)
 	(define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 	;;(define-key yas-minor-mode-map (kbd "<the new key>") 'yas-expand)
 )
+
+(if (not (eq system-type 'gnu/linux))
 
 (use-package helm-gtags
 	:ensure t
@@ -468,6 +478,7 @@
 	(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
 	(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
 	(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+)
 )
 
 (use-package evil-magit
@@ -497,6 +508,7 @@
 	:ensure t
 	:config
 	(add-to-list 'magit-log-arguments "--date-order")
+	(setq git-commit-summary-max-length 80)
 )
 
 (use-package w3
@@ -514,9 +526,7 @@
 	:config
     (add-hook 'c-mode-common-hook
               '(lambda()
-                   (if (file-exists-p uncrustify-config-path)
                            (uncrustify-mode 1))))
-)
 
 (use-package framemove
 	:ensure t
@@ -524,6 +534,9 @@
     (windmove-default-keybindings)
     (setq framemove-hook-into-windmove t)
 )
+
+(require 'qt-pro)
+(add-to-list 'auto-mode-alist '("\\.pro\\'" . qt-pro-mode))
 
 (load "cdb-gud")
 (load "cdb-mi")
@@ -538,12 +551,12 @@
 (require 'gdb-mi)
 (gdb-many-windows)
 
-;; (require 'doxymacs)
-;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
-;; (defun my-doxymacs-font-lock-hook ()
-;;     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-;;         (doxymacs-font-lock)))
-;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+(require 'doxymacs)
+(add-hook 'c-mode-common-hook 'doxymacs-mode)
+(defun my-doxymacs-font-lock-hook ()
+    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+        (doxymacs-font-lock)))
+(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
 
 
 (provide 'init-packages)

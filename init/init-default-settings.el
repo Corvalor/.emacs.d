@@ -24,7 +24,14 @@
 
 (require 'cc-mode)
 (setq-default c-basic-offset 4 c-default-style "k&r")
-(setq-default tab-width 4 indent-tabs-mode nil)
+(c-set-offset 'innamespace 0)
+(c-add-style "user"
+  '("k&r"
+    (c-special-indent-hook)
+    (c-basic-offset . 4)
+    (c-offsets-alist . (
+      (innamespace . 0)))))
+
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 ;; Disable Automatic Line break, only leave it enable in selected modes
 (setq-default truncate-lines 1)
@@ -62,6 +69,8 @@
 ;; Unset because in org mode I often mistype C-c C-x as this command, closing
 ;; emacs and annoying me
 (setq confirm-kill-emacs 'yes-or-no-p)
+
+(setq default-buffer-file-coding-system 'utf-8-dos)
 
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here

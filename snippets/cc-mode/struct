@@ -1,0 +1,21 @@
+#name: Struct definition
+#key: struct
+# --
+/**
+  * ${2:description}
+  **/
+struct ${1:name}
+{
+public:
+    //! Constructor
+    $1() {}
+    //! Destructor
+    ~$1() {}
+    //! Move-Constructor (default)
+    $1( $1 && ) = default;
+private:
+    //! Copy-Constructor (delete)
+    $1( const $1 & ) = delete;
+    //! Asignment-Operator (delete)
+    $1 &operator=( const $1 & ) = delete;
+};
