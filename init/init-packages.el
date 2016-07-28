@@ -538,6 +538,11 @@
 (require 'qt-pro)
 (add-to-list 'auto-mode-alist '("\\.pro\\'" . qt-pro-mode))
 
+(use-package lua-mode
+	:ensure t
+	:config
+)
+
 (load "cdb-gud")
 (load "cdb-mi")
 
