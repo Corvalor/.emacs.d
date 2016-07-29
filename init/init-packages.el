@@ -271,7 +271,7 @@
                              (call-interactively #'evil-find-char))
                  :bind ((evil-cross-lines t)))
 
-		  "SPC F" (evilem-create 'evil-repeat-find-char-backwards
+		  "SPC F" (evilem-create 'evil-repeat-find-char
                  :pre-hook (save-excursion
                              (call-interactively #'evil-find-char-backward))
                  :bind ((evil-cross-lines t)))
