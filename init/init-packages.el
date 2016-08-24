@@ -211,6 +211,7 @@
 		"'" '(lambda() (interactive) (find-file org-default-trello-file) (universal-argument))
 		"v" 'org-insert-todo-subheading-respect-content
 		"f" 'org-insert-todo-heading-respect-content
+	        "u" 'uncrustify-buffer
 	)
 )
 
@@ -223,8 +224,8 @@
 	(define-prefix-command 'easymotion-prefix)
 	(evilem-default-keybindings "C-[")
 	(evil-leader/set-key
-        "SPC w" 	(evilem-create 'evil-forward-word-begin
-                                   :scope 'line )
+	    "SPC w" 	(evilem-create 'evil-forward-word-begin
+				    :scope 'line )
 		  "SPC W" 	(evilem-create 'evil-forward-WORD-begin
                                    :scope 'line )
 		  "SPC e" 	(evilem-create 'evil-forward-word-end
@@ -526,7 +527,8 @@
 	:config
     (add-hook 'c-mode-common-hook
               '(lambda()
-                           (uncrustify-mode 1))))
+		   (uncrustify-mode 1)))
+)
 
 (use-package framemove
 	:ensure t
