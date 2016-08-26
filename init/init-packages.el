@@ -180,6 +180,10 @@
         (interactive)
         (compile long-doxy-command)
     )
+    (defun open-in-qtcreator()
+        (interactive)
+        (shell-command (concat "qtcreator -client " (buffer-file-name)))
+    )
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
 	(setq evil-leader/in-all-states 1)
@@ -212,6 +216,7 @@
 		"v" 'org-insert-todo-subheading-respect-content
 		"f" 'org-insert-todo-heading-respect-content
 	        "u" 'uncrustify-buffer
+	        "q" 'open-in-qtcreator
 	)
 )
 
