@@ -550,6 +550,15 @@
 	:config
 )
 
+(use-package slime
+    :ensure t
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl")
+    (setq slime-contribs '(slime-fancy))
+    (add-to-list 'auto-mode-alist '("\\.cl\\'" . slime-mode))
+    (add-to-list 'auto-mode-alist '("\\.asd\\'" . slime-mode))
+    (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
+
 (load "cdb-gud")
 (load "cdb-mi")
 

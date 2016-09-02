@@ -43,7 +43,7 @@
 ;; new lines, I redisable it
 (add-hook 'ag-mode-hook (lambda () (setq truncate-lines 1)))
 
-(setq lisp-body-indent 4)
+(setq lisp-body-indent 2)
 
 ;;Disable the varous things in the window-system, that we don't want
 (tool-bar-mode -1)
