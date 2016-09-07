@@ -544,6 +544,7 @@
 
 (require 'qt-pro)
 (add-to-list 'auto-mode-alist '("\\.pro\\'" . qt-pro-mode))
+(add-to-list 'auto-mode-alist '("\\.pri\\'" . qt-pro-mode))
 
 (use-package lua-mode
 	:ensure t
