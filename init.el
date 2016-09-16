@@ -26,7 +26,9 @@
 (require 'init-custom-packages)
 
 ;; Push the custom variables somewhere else
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+(if (not (file-exists-p custom-file))
+    (write-region "" nil custom-file))
 (load custom-file)
 
 ;; modeline
