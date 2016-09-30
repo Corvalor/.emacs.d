@@ -72,5 +72,7 @@
 
 (setq default-buffer-file-coding-system 'utf-8-dos)
 
+(winner-mode)
+
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here
