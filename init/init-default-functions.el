@@ -175,4 +175,88 @@ regular expression."
                 (delete-region (point) (progn (forward-line 1) (point)))
               (push line lines)
               (forward-line 1)))))))
+
+(defun re-backward(regex &optional endmatch)
+  (condition-case nil
+    (let ((start_pos (point))
+	    (result (re-search-backward regex)))
+	(if endmatch
+	    (setq result (re-forward endmatch)))
+	(goto-char start_pos)
+	result)
+  (error (point-min))))
+
+(defun re-forward(regex &optional endmatch)
+  (condition-case nil
+  (let ((start_pos (point))
+	(result (re-search-forward regex)))
+	(if endmatch
+	    (setq result (re-backward endmatch)))
+	(goto-char start_pos)
+	result)
+  (error (point-max))))
+
+(defun class-name()
+  (let ((class-string (buffer-substring (re-backward "class .*")
+					(re-backward "class .*" "$"))))
+    (string-match "class \\(.*\\)" class-string)
+    (match-string 1 class-string)))
+
+(defun pre-method-name(function)
+    (string-match "\\(.* \\)[~a-zA-Z_]+(.*" function)
+    (match-string 1 function))
+
+(defun method-name(function)
+    (string-match ".* \\([~a-zA-Z_]+\\)(.*" function)
+    (match-string 1 function))
+
+(defun post-method-name(function)
+    (string-match ".* [~a-zA-Z_]+\\((.*\\);" function)
+    (match-string 1 function))
+
+(defun function-definition(function)
+  (concat (pre-method-name function)
+	  (class-name)
+	  "::"
+	  (method-name function)
+	  (post-method-name function)
+	  " {}"))
+
+(defun implement-declaration()
+  (interactive)
+  (let ((end (re-forward ";"))
+	(start (max (re-backward ";")
+		    (re-backward "{")
+		    (re-backward "}")
+		    (re-backward "//.*" "$"))))
+    (let ((matched (buffer-substring start
+				     end )))
+      (if (string-match "^[\n\r]*" matched)
+	    (setq matched (replace-match "" nil nil matched)))
+      (let ((starting-buffer buffer-file-name)
+	    (function-definition-to-insert (function-definition matched)))
+	(projectile-find-other-file)
+	(when (not (equal starting-buffer buffer-file-name))
+	  (beginning-of-buffer)
+	  (let (( num-namespaces (count-matches "namespace .* {")))
+	    (end-of-buffer)
+	    (when (not (re-search-backward "}" nil t (+ num-namespaces 1)))
+	      (re-search-backward "}" nil nil num-namespaces)
+	      (re-search-backward "{"))
+	    (end-of-line)
+	    (newline-and-indent)
+	    (newline-and-indent)
+	    (insert (remove-whitespace function-definition-to-insert))
+	    (backward-char)
+	    (newline-and-indent)
+	    (forward-line -1)
+	    (end-of-line)
+	    (newline-and-indent)
+	    (evil-insert 0)))))))
+
+(defun remove-whitespace(str)
+  (if (string-match "^[ \t]*" str)
+      (replace-match "" nil nil str)
+      str))
+  
 (provide 'init-default-functions)

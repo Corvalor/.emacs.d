@@ -184,12 +184,22 @@
         (interactive)
         (shell-command (concat "qtcreator -client " (buffer-file-name)))
     )
+    (defun create-other-file()
+      (interactive)
+      (if buffer-file-name
+	  (let (( extension (projectile--file-name-extensions buffer-file-name))
+		( name (file-name-sans-extension buffer-file-name)))
+	    (progn
+	      (cond ((string-equal extension "h") (find-file (concat name ".cpp")))
+		    ((string-equal extension "cpp") (find-file (concat name ".h")))
+		    ())))))
 	(global-evil-leader-mode)
 	(evil-leader/set-leader "<SPC>")
 	(setq evil-leader/in-all-states 1)
 	(evil-leader/set-key
 		"j" 'my-compile
-		"i" 'my-iwyu
+		"y" 'my-iwyu
+		"i" 'implement-declaration
 		"e" 'my-short-doxy
 		"w" 'my-category-doxy
 		"d" 'my-long-doxy
@@ -209,6 +219,7 @@
 		"t"	'custom-find-symbol-at-point
 		"r"	'custom-go-back
 		"o"	'projectile-find-other-file
+		"O"	'create-other-file
 		"m"	'magit-status
 		"c"	'(lambda() (interactive) (org-capture nil "t"))
 		";" '(lambda() (interactive) (find-file org-default-notes-file) (universal-argument))
@@ -579,7 +590,6 @@
     (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
         (doxymacs-font-lock)))
 (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
