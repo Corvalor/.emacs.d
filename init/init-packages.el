@@ -565,7 +565,11 @@
 (use-package slime
     :ensure t
     :config
-    (setq inferior-lisp-program "/usr/bin/sbcl")
+    (defun attempt-add(path)
+      (if (and (file-exists-p path) (equal inferior-lisp-program "lisp"))
+	  (setq inferior-lisp-program path)))
+    (attempt-add "C:/SBCL/1.3.9/sbcl.exe")
+    (attempt-add "~/usr/bin/sbcl")
     (setq slime-contribs '(slime-fancy))
     (add-to-list 'auto-mode-alist '("\\.cl\\'" . slime-mode))
     (add-to-list 'auto-mode-alist '("\\.asd\\'" . slime-mode))
@@ -584,12 +588,14 @@
 (require 'gdb-mi)
 (gdb-many-windows)
 
-(require 'doxymacs)
-(add-hook 'c-mode-common-hook 'doxymacs-mode)
-(defun my-doxymacs-font-lock-hook ()
-    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-        (doxymacs-font-lock)))
-(add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+(if (file-exists-p (concat user-emacs-directory "doxymacs"))
+    (progn
+      (require 'doxymacs)
+      (add-hook 'c-mode-common-hook 'doxymacs-mode)
+      (defun my-doxymacs-font-lock-hook ()
+	(if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+	    (doxymacs-font-lock)))
+      (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)))
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
