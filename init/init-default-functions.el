@@ -199,7 +199,7 @@ regular expression."
 (defun class-name()
   (let ((class-string (buffer-substring (re-backward "class .*")
 					(re-backward "class .*" "$"))))
-    (string-match "class \\(.*\\)" class-string)
+    (string-match "class \\([a-zA-Z_]+\\)" class-string)
     (match-string 1 class-string)))
 
 (defun pre-method-name(function)
@@ -214,13 +214,34 @@ regular expression."
     (string-match ".* [~a-zA-Z_]+\\((.*\\);" function)
     (match-string 1 function))
 
+(defun remove-whitespace(str)
+  (if (string-match "^[ \t]*" str)
+      (replace-match "" nil nil str)
+      str))
+
+(defun remove-virtual(str)
+  (if (string-match "virtual " str)
+      (replace-match "" nil nil str)
+      str))
+
+(defun remove-override(str)
+  (if (string-match "override " str)
+      (replace-match "" nil nil str)
+      str))
+
+(defun clean-up-function-definition(str)
+  (remove-virtual
+   (remove-override
+    (remove-whitespace str))))
+
 (defun function-definition(function)
-  (concat (pre-method-name function)
-	  (class-name)
-	  "::"
-	  (method-name function)
-	  (post-method-name function)
-	  " {}"))
+  (clean-up-function-definition
+   (concat (pre-method-name function)
+	   (class-name)
+	   "::"
+	   (method-name function)
+	   (post-method-name function)
+	   " {}")))
 
 (defun implement-declaration()
   (interactive)
@@ -246,7 +267,7 @@ regular expression."
 	    (end-of-line)
 	    (newline-and-indent)
 	    (newline-and-indent)
-	    (insert (remove-whitespace function-definition-to-insert))
+	    (insert function-definition-to-insert)
 	    (backward-char)
 	    (newline-and-indent)
 	    (forward-line -1)
@@ -254,9 +275,4 @@ regular expression."
 	    (newline-and-indent)
 	    (evil-insert 0)))))))
 
-(defun remove-whitespace(str)
-  (if (string-match "^[ \t]*" str)
-      (replace-match "" nil nil str)
-      str))
-  
 (provide 'init-default-functions)
