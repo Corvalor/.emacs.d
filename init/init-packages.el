@@ -182,8 +182,10 @@
     )
     (defun open-in-qtcreator()
         (interactive)
-        (shell-command (concat "qtcreator -client " (buffer-file-name)))
-    )
+	(let ((position (concat (buffer-file-name) ":"
+				(number-to-string (line-number-at-pos)) ":"
+				(number-to-string (current-column)))))
+        (shell-command (concat "qtcreator -client " position))))
     (defun create-other-file()
       (interactive)
       (if buffer-file-name
