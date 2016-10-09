@@ -24,7 +24,7 @@
 				(setq real-path path)
 				(setq real-namespace namespace)
 				(setq rel-path (string-remove-prefix path curr-path))))))
-	(cons real-namespace (delete "" (split-string rel-path "/")))))
+	(cons real-namespace (delete "lib" (delete "" (split-string rel-path "/"))))))
 
 (defun namespace-start()
     (setq namespaces "")

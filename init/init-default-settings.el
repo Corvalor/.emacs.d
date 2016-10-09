@@ -99,5 +99,7 @@ current buffer's, reload dir-locals."
               (add-hook (make-variable-buffer-local 'after-save-hook)
                         'my-reload-dir-locals-for-all-buffer-in-this-directory))))
 
+(winner-mode)
+
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here
