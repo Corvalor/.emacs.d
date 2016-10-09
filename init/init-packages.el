@@ -43,14 +43,14 @@
 	(global-set-key (kbd "C-x b") 'helm-buffers-list)
 )
 
-(use-package helm-ag
-	:ensure t
-	:config
-	(custom-set-variables
-	 '(helm-ag-base-command "ag --nocolor --nogroup --ignore-case")
-	 '(helm-ag-insert-at-point 'symbol)
-	)
-)
+;;(use-package helm-ag
+	;;:ensure t
+	;;:config
+	;;(custom-set-variables
+	 ;;'(helm-ag-base-command "ag --nocolor --nogroup --ignore-case")
+	 ;;'(helm-ag-insert-at-point 'symbol)
+	;;)
+;;)
 
 (use-package org
 	:ensure t
@@ -471,7 +471,7 @@
 	)
 
 	:config
-	;; Enable helm-gtags-mode
+	 ;;Enable helm-gtags-mode
 	(add-hook 'dired-mode-hook 'helm-gtags-mode)
 	(add-hook 'eshell-mode-hook 'helm-gtags-mode)
 	(add-hook 'c-mode-hook 'helm-gtags-mode)
@@ -530,9 +530,9 @@
 (use-package uncrustify-mode
 	:ensure t
 	:config
-    (add-hook 'c-mode-common-hook
-              '(lambda()
-		   (uncrustify-mode 1)))
+    ;;(add-hook 'c-mode-common-hook
+              ;;'(lambda()
+		   ;;(uncrustify-mode 1)))
 )
 
 (use-package framemove
