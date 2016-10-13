@@ -196,7 +196,7 @@ regular expression."
 	result)
   (error (point-max))))
 
-(defun class-name()
+(defun current-class-name()
   (let ((class-string (buffer-substring (re-backward "class .*")
 					(re-backward "class .*" "$"))))
     (string-match "class \\([a-zA-Z_]+\\)" class-string)
@@ -237,7 +237,7 @@ regular expression."
 (defun function-definition(function)
   (clean-up-function-definition
    (concat (pre-method-name function)
-	   (class-name)
+	   (current-class-name)
 	   "::"
 	   (method-name function)
 	   (post-method-name function)
