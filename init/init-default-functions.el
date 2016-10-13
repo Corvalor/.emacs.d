@@ -211,7 +211,7 @@ regular expression."
     (match-string 1 function))
 
 (defun post-method-name(function)
-    (string-match ".* [~a-zA-Z_]+\\(([ a-zA-Z:,\n\r\t_<>]+)\\);" function)
+    (string-match ".* [~a-zA-Z_]+\\(([ a-zA-Z:,\n\r\t_<>&~]*)\\);" function)
     (match-string 1 function))
 
 (defun remove-whitespace(str)
