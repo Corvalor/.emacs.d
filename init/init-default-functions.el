@@ -197,23 +197,30 @@ regular expression."
 	result)
   (error (point-max))))
 
+(defvar method_regex "[~a-zA-Z0-9_!=\\<\\>]+\\[*\\]*")
+(setq method_regex "[~a-zA-Z0-9_!=\\<\\>]+\\[*\\]*")
+
 (defun current-class-name()
   (let ((class-string (buffer-substring (re-backward "class .*")
 					(re-backward "class .*" "$"))))
-    (string-match "class \\([a-zA-Z_]+\\)" class-string)
+    (string-match "class \\([a-zA-Z0-9_=]+\\)" class-string)
     (match-string 1 class-string)))
 
 (defun pre-method-name(function)
-    (string-match "\\(.* \\)[~a-zA-Z_]+(.*" function)
+    (string-match (concat "\\(.* \\)" method_regex "(.*") function)
     (match-string 1 function))
 
 (defun method-name(function)
-    (string-match ".* \\([~a-zA-Z_]+\\)(.*" function)
-    (match-string 1 function))
+  (let ((regex
+	 (concat ".* \\(" method_regex "\\)(.*")))
+    (string-match regex function)
+    (match-string 1 function)))
 
 (defun post-method-name(function)
-    (string-match ".* [~a-zA-Z_]+\\(([ a-zA-Z:,\n\r\t_<>]+)\\);" function)
-    (match-string 1 function))
+  (let ((regex
+	 (concat ".* " method_regex "\\(([ a-zA-Z0-9:,\n\r\t_<>&~*=()]*)\\)[^)]*;")))
+    (string-match regex function)
+    (match-string 1 function)))
 
 (defun remove-whitespace(str)
   (if (string-match "^[ \t]*" str)
@@ -250,6 +257,7 @@ regular expression."
 	(start (max (re-backward ";")
 		    (re-backward "{")
 		    (re-backward "}")
+		    (re-backward ">")
 		    (re-backward "//.*" "$"))))
     (let ((matched (buffer-substring start
 				     end )))
@@ -262,9 +270,10 @@ regular expression."
 	  (beginning-of-buffer)
 	  (let (( num-namespaces (count-matches "namespace .* {")))
 	    (end-of-buffer)
-	    (when (not (re-search-backward "}" nil t (+ num-namespaces 1)))
-	      (re-search-backward "}" nil nil num-namespaces)
-	      (re-search-backward "{"))
+	    (when (> num-namespaces 0)
+		(when (not (re-search-backward "}" nil t (+ num-namespaces 1)))
+		(re-search-backward "}" nil nil num-namespaces)
+		(re-search-backward "{")))
 	    (end-of-line)
 	    (newline-and-indent)
 	    (newline-and-indent)

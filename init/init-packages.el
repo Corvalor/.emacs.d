@@ -111,6 +111,7 @@
 	(evil-define-key 'visual (current-global-map) (kbd "m") 'evil-delete)
 	(evil-define-key 'normal (current-global-map) (kbd "M") 'evil-delete-line)
 	(evil-define-key 'visual (current-global-map) (kbd "M") 'evil-delete-line)
+	(evil-set-initial-state '2048-mode 'emacs)
 )
 
 (use-package evil-org
