@@ -161,6 +161,7 @@ regular expression."
 		    (replace-match (concat "FORMS += " (mapconcat 'identity form-files " \\\\\n           ")) t)
 		))
 	))
+
   (defun uniquify-all-lines-region (start end)
     "Find duplicate lines in region START to END keeping first occurrence."
     (interactive "*r")

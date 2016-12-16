@@ -577,9 +577,6 @@
     (add-to-list 'auto-mode-alist '("\\.asd\\'" . slime-mode))
     (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
 
-(load "cdb-gud")
-(load "cdb-mi")
-
 (global-set-key [f5]    'gud-cont)
 (global-set-key [f7]    'gud-tbreak)
 (global-set-key [f8]    'gud-step)
