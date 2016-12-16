@@ -276,12 +276,12 @@
                  :bind ((temporary-goal-column (current-column))
                         (line-move-visual t)))
 
-		  "SPC t" (evilem-create 'evil-repeat-find-char
+		  "SPC t" (evilem-create 'evil-repeat-find-char-to
                  :pre-hook (save-excursion
                              (call-interactively #'evil-find-char-to))
                  :bind ((evil-cross-lines t)))
 
-		   "SPC T" (evilem-create 'evil-repeat-find-char
+		   "SPC T" (evilem-create 'evil-repeat-find-char-to-backward
                  :pre-hook (save-excursion
                              (call-interactively #'evil-find-char-to-backward))
                  :bind ((evil-cross-lines t)))
@@ -291,7 +291,7 @@
                              (call-interactively #'evil-find-char))
                  :bind ((evil-cross-lines t)))
 
-		  "SPC F" (evilem-create 'evil-repeat-find-char
+		  "SPC F" (evilem-create 'evil-repeat-find-char-backwards
                  :pre-hook (save-excursion
                              (call-interactively #'evil-find-char-backward))
                  :bind ((evil-cross-lines t)))
