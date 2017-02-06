@@ -185,8 +185,28 @@
         (interactive)
 	(let ((position (concat (buffer-file-name) ":"
 				(number-to-string (line-number-at-pos)) ":"
-				(number-to-string (current-column)))))
-        (shell-command (concat "qtcreator -client " position))))
+				(number-to-string (current-column))))
+	      (pids '()))
+	  (loop for i in (list-system-processes)
+		do ( let ((name (cdr (assoc 'comm (process-attributes i) )))
+			  (id i))
+		     (if (string= name "qtcreator")
+			(add-to-list 'pids id))
+		     ))
+	  (when (> (list-length pids) 1)
+	      (message "Which qtcreator?")
+	      (let ((selection (read-key)))
+		(when (> selection 48)
+		  (when (< selection 59)
+		    (setq selection (- selection 49))
+		    (setq selection (nth selection pids))
+		    (when selection
+			(setq selection (number-to-string selection))
+			(shell-command (concat "qtcreator -pid " selection " " position)))))
+		))
+	  (when (< (list-length pids) 2)
+	    (shell-command
+	     (concat "qtcreator -pid " (number-to-string (car pids)) " " position)))))
     (defun create-other-file()
       (interactive)
       (if buffer-file-name
