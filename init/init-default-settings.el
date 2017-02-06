@@ -100,6 +100,19 @@ current buffer's, reload dir-locals."
                         'my-reload-dir-locals-for-all-buffer-in-this-directory))))
 
 (winner-mode)
+ (defun my-compilation-hook () 
+    "Record starting time of the Compilation"
+    (setq compilation-start-time (current-time))
+  )
+  (add-hook 'compilation-mode-hook 'my-compilation-hook)
+(defun bury-compile-buffer-if-successful (buffer string)
+ "Print the Compilation time after compilation has finished"
+ (when (and
+         (buffer-live-p buffer)
+         (string-match "compilation" (buffer-name buffer)))
+   (goto-char (point-max))
+   (insert (format "Compilation took %.02f seconds." (float-time (time-since compilation-start-time ))))))
+(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
 
 (provide 'init-default-settings)
 ;;; init-default-settings.el ends here
