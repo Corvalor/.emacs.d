@@ -207,7 +207,7 @@ regular expression."
 
 (defun pre-method-name(function)
     (string-match (concat "\\(.* \\)" method_regex "(.*") function)
-    (match-string 1 function))
+    (remove-static (match-string 1 function)))
 
 (defun method-name(function)
   (let ((regex
@@ -236,6 +236,11 @@ regular expression."
       (replace-match "" nil nil str)
       str))
 
+(defun remove-static(str)
+  (if (string-match "static " str)
+      (replace-match "" nil nil str)
+      str))
+
 (defun clean-up-function-definition(str)
   (remove-virtual
    (remove-override
@@ -256,7 +261,6 @@ regular expression."
 	(start (max (re-backward ";")
 		    (re-backward "{")
 		    (re-backward "}")
-		    (re-backward ">")
 		    (re-backward "//.*" "$"))))
     (let ((matched (buffer-substring start
 				     end )))
