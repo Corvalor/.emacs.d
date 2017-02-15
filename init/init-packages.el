@@ -485,7 +485,7 @@
 	:ensure t
 	:config
 	(yas-global-mode 1)
-	(define-key yas-minor-mode-map (kbd "<tab>") 'yas-expand)
+	;;(define-key yas-minor-mode-map (kbd "<tab>") 'yas-expand)
 	(define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 	;;(define-key yas-minor-mode-map (kbd "<the new key>") 'yas-expand)
 )
