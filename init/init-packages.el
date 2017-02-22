@@ -192,6 +192,8 @@
 			  (id i))
 		     (if (string= name "qtcreator")
 			(add-to-list 'pids id))
+		     (if (string= name "qtcreator-bin")
+			(add-to-list 'pids id))
 		     ))
 	  (when (> (list-length pids) 1)
 	      (message "Which qtcreator?")
