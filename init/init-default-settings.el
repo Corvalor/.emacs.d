@@ -102,9 +102,9 @@ current buffer's, reload dir-locals."
 (winner-mode)
  (defun my-compilation-hook () 
     "Record starting time of the Compilation"
-    (setq compilation-start-time (current-time))
-  )
+    (setq compilation-start-time (current-time)))
   (add-hook 'compilation-mode-hook 'my-compilation-hook)
+
 (defun bury-compile-buffer-if-successful (buffer string)
  "Print the Compilation time after compilation has finished"
  (when (and
