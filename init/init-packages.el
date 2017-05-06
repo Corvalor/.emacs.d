@@ -167,7 +167,7 @@
     )
     (defun my-iwyu()
         (interactive)
-        (compile (funcall iwyu-command))
+        (compile iwyu-command)
     )
     (defun my-short-doxy()
         (interactive)
