@@ -486,10 +486,12 @@
 (use-package yasnippet
 	:ensure t
 	:config
-	(yas-global-mode 1)
 	;;(define-key yas-minor-mode-map (kbd "<tab>") 'yas-expand)
 	(define-key yas-minor-mode-map (kbd "TAB") 'yas-expand)
 	;;(define-key yas-minor-mode-map (kbd "<the new key>") 'yas-expand)
+	(setq yas-snippet-dirs
+	      '("~/.emacs.d/snippets"))
+	(yas-global-mode 1)
 )
 
 (if (not (eq system-type 'gnu/linux))
@@ -566,17 +568,17 @@
 (use-package uncrustify-mode
 	:ensure t
 	:config
-    ;;(add-hook 'c-mode-common-hook
-              ;;'(lambda()
-		   ;;(uncrustify-mode 1)))
+	(add-hook 'c-mode-common-hook
+              '(lambda()
+		   (uncrustify-mode 1)))
 )
 
-(use-package framemove
-	:ensure t
-	:config
-    (windmove-default-keybindings)
-    (setq framemove-hook-into-windmove t)
-)
+;;(use-package framemove
+	;;:ensure t
+	;;:config
+    ;;(windmove-default-keybindings)
+    ;;(setq framemove-hook-into-windmove t)
+;;)
 
 (require 'qt-pro)
 (add-to-list 'auto-mode-alist '("\\.pro\\'" . qt-pro-mode))
