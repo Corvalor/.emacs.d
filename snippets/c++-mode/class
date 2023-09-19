@@ -16,6 +16,6 @@ public:
 private:
     //! Copy-Constructor (delete)
     $1( const $1 & ) = delete;
-    //! Asignment-Operator (delete)
+    //! Assignment-Operator (delete)
     $1 &operator=( const $1 & ) = delete;
 };
