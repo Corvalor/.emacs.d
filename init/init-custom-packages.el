@@ -13,10 +13,10 @@
   (condition-case err
       ad-do-it
     (error
-     ( let ((dir (cond ((eq (ad-get-arg 0) 'left) "-1")
+     ( let ((dir (cond ((eq (ad-get-arg 0) 'left) "1")
                        ((eq (ad-get-arg 0) 'up) "0")
                        ((eq (ad-get-arg 0) 'down) "0")
-                       ((eq (ad-get-arg 0) 'right) "1"))))
+                       ((eq (ad-get-arg 0) 'right) "-1"))))
          (shell-command (concat "echo 'require(\"awful\").screen.focus_relative(" dir ")' | awesome-client" ))))))
 
 (provide 'init-custom-packages)

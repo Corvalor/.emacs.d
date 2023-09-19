@@ -453,6 +453,9 @@
 	:config
 	(setq projectile-indexing-method 'alien)
 	(projectile-global-mode)
+	(projectile-mode +1)
+	(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+	(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 	(defun buffer-whole-string (buffer)
 		(with-current-buffer buffer
 			(save-restriction
@@ -573,13 +576,6 @@
 		   (uncrustify-mode 1)))
 )
 
-;;(use-package framemove
-	;;:ensure t
-	;;:config
-    ;;(windmove-default-keybindings)
-    ;;(setq framemove-hook-into-windmove t)
-;;)
-
 (require 'qt-pro)
 (add-to-list 'auto-mode-alist '("\\.pro\\'" . qt-pro-mode))
 (add-to-list 'auto-mode-alist '("\\.pri\\'" . qt-pro-mode))
@@ -601,6 +597,11 @@
     (add-to-list 'auto-mode-alist '("\\.cl\\'" . slime-mode))
     (add-to-list 'auto-mode-alist '("\\.asd\\'" . slime-mode))
     (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
+
+(use-package yaml-mode
+  :ensure t
+  :config
+  )
 
 (global-set-key [f5]    'gud-cont)
 (global-set-key [f7]    'gud-tbreak)
