@@ -14,3 +14,5 @@ url/cookies
 /%backup%~
 /irony/bin/irony-server
 /network-security.data
+tramp
+eln-cache/28.2-8532cd27
